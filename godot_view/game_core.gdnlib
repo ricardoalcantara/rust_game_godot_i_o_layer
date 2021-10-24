@@ -1,0 +1,5 @@
+[entry]
+
+X11.64="res://../game_core/target/debug/libgame_core.so"
+OSX.64="res://../game_core/target/debug/libgame_core.dylib"
+Windows.64="res://../game_core/target/debug/game_core.dll"
