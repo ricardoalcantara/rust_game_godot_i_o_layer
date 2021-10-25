@@ -60,7 +60,7 @@ pub fn system_update_physics(world: &mut World) {
                         break;
                     }
                 } else {
-                    // transform.position.x += sign as f32;
+                    transform.position.x += sign as f32;
                     move_x -= sign;
                 }
             }
@@ -90,7 +90,7 @@ pub fn system_update_physics(world: &mut World) {
                         break;
                     }
                 } else {
-                    // transform.position.y += sign as f32;
+                    transform.position.y += sign as f32;
                     move_y -= sign;
                 }
             }

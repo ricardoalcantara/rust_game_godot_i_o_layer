@@ -1,6 +1,6 @@
 extern crate gdnative;
 
-use game::Game;
+use game::{Events, Game, InputType};
 use gdnative::prelude::*;
 
 #[derive(NativeClass)]
@@ -23,9 +23,6 @@ impl HelloWorld {
     fn _ready(&mut self, owner: &Node) {
         let x = unsafe { owner.get_node_as::<Node2D>("Sprite").unwrap().claim() };
         self.node_ref = Some(x);
-        // if let Some(n) = self.node_ref {
-        //     unsafe { n.assume_safe().set_position(Vector2::zero()); }
-        // }
 
         self.game.ready().unwrap();
 
@@ -34,11 +31,37 @@ impl HelloWorld {
 
     #[export]
     fn _process(&mut self, _owner: &Node, delta: f32) {
+        let inputs = HelloWorld::get_inputs();
+        self.game.add_actions(inputs);
         self.game.update(delta).unwrap();
 
-        let n = unsafe { self.node_ref.unwrap().assume_safe() };
-        let pos = self.game.get_first_entity_position();
-        n.set_position(pos);
+        for event in self.game.get_events() {
+            match event {
+                Events::PlayerUpdate(pos) => {
+                    let n = unsafe { self.node_ref.unwrap().assume_safe() };
+                    n.set_position(pos);
+                }
+            }
+        }
+    }
+
+    fn get_inputs() -> Vec<InputType> {
+        let mut inputs = Vec::new();
+        let input = Input::godot_singleton();
+        if Input::is_action_pressed(input, "move_left") {
+            inputs.push(InputType::ActionPressed("move_left"))
+        }
+        if Input::is_action_pressed(input, "move_right") {
+            inputs.push(InputType::ActionPressed("move_right"))
+        }
+        if Input::is_action_pressed(input, "move_up") {
+            inputs.push(InputType::ActionPressed("move_up"))
+        }
+        if Input::is_action_pressed(input, "move_down") {
+            inputs.push(InputType::ActionPressed("move_down"))
+        }
+
+        inputs
     }
 }
 
